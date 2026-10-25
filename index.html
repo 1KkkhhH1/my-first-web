@@ -1,13 +1,41 @@
-const URL = '...exec';          // 데이터 주소를 변수에 저장 (엑셀의 "셀에 주소 적어두기")
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <title>내 첫 웹사이트</title>
+    <style>
+      body { font-family: sans-serif; padding: 24px; }
+      table { border-collapse: collapse; margin-top: 16px; }
+      th, td { border: 1px solid #ccc; padding: 8px 16px; text-align: right; }
+      th { background: #f2f2f2; }
+      td:first-child, th:first-child { text-align: left; }
+    </style>
+  </head>
+  <body>
+    <h1>Hello World! 바이브 코딩 시작!</h1>
+    <p>내 첫 웹사이트가 인터넷에 떴습니다.</p>
 
-fetch(URL)                       // fetch(주소) → 그 주소에서 데이터 가져오기
-  .then(res => res.json())       // 받은 글자를 JSON 목록으로 해석
-  .then(data => {                // data = 시트의 행 목록 (3줄)
-    const headers = Object.keys(data[0]);
-    // Object.keys(첫 행) → 제목들만 뽑기: ["캠페인","비용","매출","ROAS"]
-    // 엑셀의 "1행 머리글만 복사"
-    headers.map(h => '<th>' + h + '</th>')
-    // map = 제목마다 같은 공식 적용 (제목을 <th>칸으로 감싸기)
-    row[h].toLocaleString()
-    // 100000 → "100,000" (엑셀의 천 단위 쉼표 서식)
-  });
+    <h2>캠페인 성과 (구글 시트 연동)</h2>
+    <p id="status">데이터 불러오는 중...</p>
+    <table id="report"></table>
+
+    <script>
+      const URL = 'https://script.google.com/macros/s/AKfycbwWQV-lj2P8_U1r1BH8JCp5dFk3P2u8tOsC6-n-n_Bo_LdDypDg89zP0eYANt4IdN5a/exec';
+
+      fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+          const headers = Object.keys(data[0]);
+          let html = '<tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr>';
+          html += data.map(row =>
+            '<tr>' + headers.map(h => '<td>' + row[h].toLocaleString() + '</td>').join('') + '</tr>'
+          ).join('');
+          document.getElementById('report').innerHTML = html;
+          document.getElementById('status').textContent = '시트에서 불러온 최신 데이터예요.';
+        })
+        .catch(() => {
+          document.getElementById('status').textContent = '데이터를 불러오지 못했어요.';
+        });
+    </script>
+  </body>
+</html>
