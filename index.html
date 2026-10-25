@@ -1,7 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <h1>Hello World! 바이브 코딩 시작!</h1>
-    <p>내 첫 웹사이트가 인터넷에 떴습니다.</p>
-  </body>
-</html>
+const URL = '...exec';          // 데이터 주소를 변수에 저장 (엑셀의 "셀에 주소 적어두기")
+
+fetch(URL)                       // fetch(주소) → 그 주소에서 데이터 가져오기
+  .then(res => res.json())       // 받은 글자를 JSON 목록으로 해석
+  .then(data => {                // data = 시트의 행 목록 (3줄)
+    const headers = Object.keys(data[0]);
+    // Object.keys(첫 행) → 제목들만 뽑기: ["캠페인","비용","매출","ROAS"]
+    // 엑셀의 "1행 머리글만 복사"
+    headers.map(h => '<th>' + h + '</th>')
+    // map = 제목마다 같은 공식 적용 (제목을 <th>칸으로 감싸기)
+    row[h].toLocaleString()
+    // 100000 → "100,000" (엑셀의 천 단위 쉼표 서식)
+  });
